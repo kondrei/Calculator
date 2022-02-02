@@ -1,0 +1,33 @@
+html {
+  background-color: #000;
+  color: #fff;
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+}
+
+.container {
+  margin: auto;
+  margin-top: 1rem;
+  width: 400px;
+  height: 700px;
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 5px 5px 15px 5px #ff8080, -9px 5px 15px 5px #ffe488,
+    5px 5px 0px 1px rgba(255, 81, 62, 0);
+}
+.topBar {
+  display: flex;
+  padding: 1rem;
+}
+.clock {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.icons{
+  padding: 10px;
+  margin-right: auto;
+}
+
+ion-icon{
+  margin: 3px;
+}
