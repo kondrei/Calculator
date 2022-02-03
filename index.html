@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped&display=swap"
-      rel="stylesheet"
-    />
-    <title>Calculator</title>
-  </head>
-  <body>
-    <div class="container">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped&display=swap" rel="stylesheet" />
+  <title>Calculator</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="phone">
       <div class="topBar">
         <div class="clock"></div>
-        <div class="icons"></div>
-            <ion-icon name="cellular"></ion-icon>
-            <ion-icon name="wifi"></ion-icon>
-            <ion-icon name="battery-half"></ion-icon>
+        <div class="icons">
+          <img src="./images/cellular-signal-icon.png" alt="" height="16">
+          <img src="./images/wifi-icon.png" alt="" height="16">
+          <img src="./images/battery-status-icon.png" alt="" height="16">
         </div>
       </div>
+      <div class="outputDisplay">0</div>
+      <div class="buttons"></div>
     </div>
-    <script src="app.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  </body>
+  </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+
 </html>
