@@ -10,8 +10,8 @@ showClock()
 setInterval(showClock, 40000)
 
 let keys = [
-    { type: 'power', text: 'AC', color: 'gray' },
-    { type: 'binary', text: '&#x00B1;', color: 'gray' },
+    { type: 'reset', text: 'AC', color: 'gray' },
+    { type: 'del', text: '&#8592;', color: 'gray' },
     { type: 'procent', text: '%', color: 'gray' },
     { type: 'operand', text: '&#247;', color: 'orange' },
     { type: 'number', text: '7', color: 'black' },
@@ -43,11 +43,26 @@ for (let key in keys) {
         button.classList.add('zero')
     }
     button.addEventListener('click', () => {
-        if (keys[key].text === 'number') {
-            output.textContent = keys[key].text
-            console.log(keys[key].text === 'number')
-        }
-        console.log(keys[key].text)
+        buttonsEvents(keys[key]);
     })
     buttons.appendChild(button)
+}
+
+function buttonsEvents(object) {
+    console.log(object.type)
+    if (object.type === 'reset') {
+        output.textContent = '0'
+    }
+
+    if (object.type === 'del') {
+        let digitRemains = output.textContent.split('')
+        digitRemains.pop();
+        (digitRemains.join('' === 'null')) ? output.textContent = digitRemains.join('') : output.textContent = '0'
+        console.log(output.textContent)
+    }
+
+    if (object.type === 'number') {
+        (output.textContent === '0') ? output.textContent = object.text : output.textContent += object.text
+    }
+
 }
