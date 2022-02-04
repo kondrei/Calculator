@@ -14,8 +14,8 @@ Create a Calculator from iOS clone with Vanilla JavaScript.
 - [x] Make AC button works
 - [x] Make DEL button works
 - [x] Number button works
-- [ ] add separator digit
-- [ ] keep the numbers inside the screen
+- [x] add separator digit
+- [x] keep the numbers inside the screen
 - [ ] make comma button works
 - [ ] basic calculation 
 - [ ] keyboard events
