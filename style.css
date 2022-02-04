@@ -3,6 +3,7 @@ html {
   color: #fff;
   font-family: "IBM Plex Sans Thai Looped", sans-serif;
   cursor: default;
+  user-select: none;
 }
 
 :root {
@@ -73,7 +74,7 @@ html {
 }
 
 .button:hover{
-  opacity: .9;
+  opacity: .8;
 }
 
 .gray{
