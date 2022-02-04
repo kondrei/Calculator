@@ -44,11 +44,19 @@ html {
 }
 
 .outputDisplay {
+  display: flex;
   text-align: right;
   font-size: 5rem;
   padding-top: 2rem;
   margin: 0 1rem;
   cursor: text;
+  height: 132px;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.small {
+  font-size: 3rem;
 }
 
 .buttons {
