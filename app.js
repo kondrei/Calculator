@@ -49,7 +49,7 @@ for (let key in keys) {
 }
 
 function buttonsEvents(object) {
-    console.log(object.type)
+
     if (object.type === 'reset') {
         output.textContent = '0'
     }
@@ -57,12 +57,31 @@ function buttonsEvents(object) {
     if (object.type === 'del') {
         let digitRemains = output.textContent.split('')
         digitRemains.pop();
-        (digitRemains.join('' === 'null')) ? output.textContent = digitRemains.join('') : output.textContent = '0'
-        console.log(output.textContent)
+        (digitRemains.join('')) ? output.textContent = digitRemains.join('') : output.textContent = '0'
     }
 
-    if (object.type === 'number') {
+    if (object.type === 'number' && checkLength(output.textContent)) {
         (output.textContent === '0') ? output.textContent = object.text : output.textContent += object.text
     }
 
+    output.textContent = beautifyNumber(output.textContent)
+}
+
+function beautifyNumber(number) {
+    number = number.replaceAll('.', '')
+    if (parseInt(number) > 999999) {
+        output.classList.add('small')
+    } else {
+        output.classList.remove('small')
+    }
+    return parseInt(number).toLocaleString('ro-RO')
+}
+
+function checkLength(number) {
+    number = number.replaceAll('.', '')
+    if (parseInt(number) >= 9999999999) {
+        return false
+    }
+
+    return true;
 }
