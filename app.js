@@ -27,12 +27,17 @@ let keys = [
     { type: 'number', text: '3', color: 'black' },
     { type: 'operand', text: '+', color: 'orange' },
     { type: 'number', text: '0', color: 'black' },
-    { type: 'comma', text: ',', color: 'black' },
-    { type: 'operand', text: '=', color: 'orange' },
+    { type: 'comma', text: '.', color: 'black' },
+    { type: 'equal', text: '=', color: 'orange' },
 ]
 
 let buttons = document.querySelector('.buttons')
 let output = document.querySelector('.outputDisplay')
+
+let leftOperand = 0;
+let rightOperand = 0;
+let operand = null;
+
 
 for (let key in keys) {
     let button = document.createElement('div')
@@ -48,10 +53,18 @@ for (let key in keys) {
     buttons.appendChild(button)
 }
 
+function allClear() {
+    output.textContent = 0
+    leftOperand = 0
+    rightOperand = 0
+    operand = null
+}
+
+
 function buttonsEvents(object) {
 
     if (object.type === 'reset') {
-        output.textContent = '0'
+        allClear()
     }
 
     if (object.type === 'del') {
@@ -64,24 +77,61 @@ function buttonsEvents(object) {
         (output.textContent === '0') ? output.textContent = object.text : output.textContent += object.text
     }
 
-    output.textContent = beautifyNumber(output.textContent)
+    if (object.type === 'comma') {
+        if (output.textContent.indexOf(object.text) < 0)
+            output.textContent += object.text
+    }
+
+    if (object.type === 'operand') {
+        if (leftOperand != 0 && rightOperand != 0) {
+            if (object.text === '+') {
+                output.textContent = leftOperand + rightOperand
+            }
+        }
+        if (operand === null) {
+            leftOperand = formatNumber(output.textContent)
+        }
+        if (operand != null) {
+            rightOperand = formatNumber(output.textContent)
+        }
+
+        operand = object.text
+
+        console.log(leftOperand, operand, rightOperand)
+    }
+
+    output.textContent = displayDigits(output.textContent)
 }
 
-function beautifyNumber(number) {
-    number = number.replaceAll('.', '')
-    if (parseInt(number) > 999999) {
+function displayDigits(number) {
+    number = formatNumber(number)
+    if (parseFloat(number) > 999999) {
         output.classList.add('small')
     } else {
         output.classList.remove('small')
     }
-    return parseInt(number).toLocaleString('ro-RO')
+
+    return checkComma(number)
+}
+
+function checkComma(number) {
+    if (number[number.length - 1] === '.') {
+        number = parseFloat(number).toLocaleString()
+        return number + '.'
+    } else {
+        return parseFloat(number).toLocaleString()
+    }
 }
 
 function checkLength(number) {
-    number = number.replaceAll('.', '')
-    if (parseInt(number) >= 9999999999) {
+    number = formatNumber(number)
+    if (number.length > 10) {
         return false
     }
 
     return true;
+}
+
+function formatNumber(number) {
+    return number.replaceAll(',', '')
 }
