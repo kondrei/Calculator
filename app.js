@@ -12,7 +12,7 @@ setInterval(showClock, 40000)
 let keys = [
     { type: 'reset', text: 'AC', color: 'gray' },
     { type: 'del', text: '&#8592;', color: 'gray' },
-    { type: 'procent', text: '%', color: 'gray' },
+    { type: 'percent', text: '%', color: 'gray' },
     { type: 'operand', text: '&#247;', color: 'orange' },
     { type: 'number', text: '7', color: 'black' },
     { type: 'number', text: '8', color: 'black' },
@@ -37,6 +37,7 @@ let output = document.querySelector('.outputDisplay')
 let leftOperand = 0;
 let rightOperand = 0;
 let operand = null;
+let firstIOperation = null;
 
 
 for (let key in keys) {
@@ -47,8 +48,8 @@ for (let key in keys) {
     if (keys[key].text === '0') {
         button.classList.add('zero')
     }
-    button.addEventListener('click', () => {
-        buttonsEvents(keys[key]);
+    button.addEventListener('click', (e) => {
+        buttonsEvents(e, keys[key]);
     })
     buttons.appendChild(button)
 }
@@ -58,10 +59,13 @@ function allClear() {
     leftOperand = 0
     rightOperand = 0
     operand = null
+    document.querySelectorAll('.selected').forEach((element) => {
+        element.classList.remove('selected')
+    })
 }
 
 
-function buttonsEvents(object) {
+function buttonsEvents(e, object) {
 
     if (object.type === 'reset') {
         allClear()
@@ -70,40 +74,69 @@ function buttonsEvents(object) {
     if (object.type === 'del') {
         let digitRemains = output.textContent.split('')
         digitRemains.pop();
-        (digitRemains.join('')) ? output.textContent = digitRemains.join('') : output.textContent = '0'
+        (digitRemains.join('')) ? output.textContent = digitRemains.join('') : output.textContent = '0';
+        (operand) ? rightOperand = output.textContent : leftOperand = output.textContent
     }
 
     if (object.type === 'number' && checkLength(output.textContent)) {
-        (output.textContent === '0') ? output.textContent = object.text : output.textContent += object.text
+        (operand) ? rightOperand += object.text : leftOperand += object.text
+
+        if (firstIOperation) {
+            output.textContent = object.text
+            firstIOperation = false
+        } else
+            (output.textContent === '0') ? output.textContent = object.text : output.textContent += object.text
     }
 
     if (object.type === 'comma') {
-        if (output.textContent.indexOf(object.text) < 0)
+        if (output.textContent.indexOf(object.text) < 0) {
             output.textContent += object.text
+        }
+        (operand) ? rightOperand += object.text : leftOperand += object.text
     }
 
-    if (object.type === 'operand') {
-        if (leftOperand != 0 && rightOperand != 0) {
-            if (object.text === '+') {
-                output.textContent = leftOperand + rightOperand
-            }
-        }
-        if (operand === null) {
-            leftOperand = formatNumber(output.textContent)
-        }
-        if (operand != null) {
-            rightOperand = formatNumber(output.textContent)
-        }
-
+    if (object.type === 'operand' && leftOperand != 0) {
+        e.target.classList.add('selected')
         operand = object.text
-
-        console.log(leftOperand, operand, rightOperand)
+        firstIOperation = true
+        if (leftOperand != 0 && rightOperand != 0 && operand) {
+            output.textContent = calculate(leftOperand, rightOperand, operand)
+        }
     }
 
-    output.textContent = displayDigits(output.textContent)
+    if (object.type === 'percent') {
+        output.textContent = '0.' + output.textContent;
+        (operand) ? rightOperand = output.textContent : leftOperand = output.textContent
+    }
+
+    if (object.type === 'equal' && leftOperand != 0 && rightOperand != 0 && operand) {
+        output.textContent = calculate(leftOperand, rightOperand, operand)
+    }
+    output.textContent = formatDigits(output.textContent)
+    console.log(leftOperand, operand, rightOperand)
 }
 
-function displayDigits(number) {
+function calculate(left, right, operation) {
+    switch (operation) {
+        case "+":
+            result = parseFloat(left) + parseFloat(right)
+            break;
+        case "-":
+            result = parseFloat(left) - parseFloat(right)
+            break;
+        case "x":
+            result = parseFloat(left) * parseFloat(right)
+            break;
+        case "&#247;":
+            result = parseFloat(left) / parseFloat(right)
+            break;
+    }
+    allClear()
+    leftOperand = result
+    return result
+}
+
+function formatDigits(number) {
     number = formatNumber(number)
     if (parseFloat(number) > 999999) {
         output.classList.add('small')
@@ -135,3 +168,16 @@ function checkLength(number) {
 function formatNumber(number) {
     return number.replaceAll(',', '')
 }
+
+document.addEventListener('keyup', (e) => {
+    switch (e.key) {
+        case 'Escape':
+            allClear()
+            break;
+        case '?':
+            document.querySelector('.background').classList.toggle('show')
+            break;
+        default:
+            break;
+    }
+})

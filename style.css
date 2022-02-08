@@ -17,6 +17,7 @@ html {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  flex-direction: column;
 }
 
 .phone{
@@ -103,4 +104,47 @@ html {
   justify-content: flex-start;
   gap: 1rem;
   padding-left: 1.5rem;
+}
+
+.selected {
+  background-color: #fff;
+  color: #000;
+}
+
+.message {
+ margin-top: 2rem;
+ color: var(--grayButton);
+}
+
+.background {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* position: absolute; */
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw-10;
+  height: 100vh-10;
+}
+
+.popUp {
+  display: block;
+  background-color: var(--grayButton);
+  position: inherit;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 150px;
+  height: 350px;
+  margin:auto;
+  border-radius: 10px;
+  box-shadow: 5px 5px 15px 5px #ff8080, -5px 5px 15px 5px #ffe488;
+  padding: 2rem;
+}
+
+.show {
+  display: block;
+  position: absolute;
 }
