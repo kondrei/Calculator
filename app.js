@@ -10,10 +10,8 @@ class Calculator {
         this.output = output
 
         this.showClock()
-        this.reset()
+        this.resetKey()
     }
-
-
 
     showClock() {
         let clock = document.querySelector('.clock')
@@ -28,20 +26,116 @@ class Calculator {
         setInterval(displayClock, 1000)
     }
 
-    reset() {
+    resetKey() {
         this.output.textContent = 0
         this.leftOperand = 0
         this.rightOperand = 0
         this.operand = null
         this.firstIOperation = null
         console.log('reset method')
+        document.querySelectorAll('.selected').forEach((element) => {
+            element.classList.remove('selected')
+        })
     }
 
-    del() {
+    delKey() {
         let digitRemains = this.output.textContent.split('')
         digitRemains.pop();
         (digitRemains.join('')) ? output.textContent = digitRemains.join('') : output.textContent = '0';
-        (this.operand) ? this.rightOperand = this.output.textContent : this.eftOperand = this.output.textContent
+        (this.operand) ? this.rightOperand = this.output.textContent : this.leftOperand = this.output.textContent
+        console.log('delete method')
+        this.output.textContent = this.#formatDigits(this.output.textContent)
+    }
+
+    commaKey(value) {
+        if (this.output.textContent.indexOf(value) < 0) {
+            this.output.textContent += value
+        }
+        (this.operand) ? this.rightOperand += value : this.leftOperand += value
+    }
+
+    numKey(value) {
+        if (this.#checkLength(this.output.textContent)) {
+            (this.operand) ? this.rightOperand += value : this.leftOperand += value
+
+            if (this.firstIOperation) {
+                this.output.textContent = value
+                this.firstIOperation = false
+            } else
+                (this.output.textContent === '0') ? this.output.textContent = value : this.output.textContent += value
+        }
+        this.output.textContent = this.#formatDigits(this.output.textContent)
+        console.log(this.leftOperand, this.operand, this.rightOperand)
+    }
+
+    operandKey(value, e) {
+        if (this.leftOperand != 0) {
+            e.target.classList.add('selected')
+            this.operand = value
+            this.firstIOperation = true
+            if (this.leftOperand != 0 && this.rightOperand != 0 && this.operand) {
+                this.output.textContent = this.#calculate(this.leftOperand, this.rightOperand, this.operand)
+            }
+        }
+    }
+
+    equalKey() {
+        if (this.leftOperand != 0 && this.rightOperand != 0 && this.operand) {
+            this.output.textContent = this.#calculate(this.leftOperand, this.rightOperand, this.operand)
+        }
+    }
+    #calculate(left, right, operation) {
+        let result = 0
+        switch (operation) {
+            case "+":
+                result = parseFloat(left) + parseFloat(right)
+                break;
+            case "-":
+                result = parseFloat(left) - parseFloat(right)
+                break;
+            case "x":
+                result = parseFloat(left) * parseFloat(right)
+                break;
+            case "&#247;":
+                result = parseFloat(left) / parseFloat(right)
+                break;
+        }
+        this.resetKey()
+        this.leftOperand = result
+        return result
+    }
+
+    #checkLength(number) {
+        number = this.#formatNumber(number)
+        if (number.length > 10) {
+            return false
+        }
+
+        return true;
+    }
+
+    #formatNumber(number) {
+        return number.replaceAll(',', '')
+    }
+
+    #formatDigits(number) {
+        number = this.#formatNumber(number)
+        if (parseFloat(number) > 999999) {
+            output.classList.add('small')
+        } else {
+            output.classList.remove('small')
+        }
+
+        return this.#checkComma(number)
+    }
+
+    #checkComma(number) {
+        if (number[number.length - 1] === '.') {
+            number = parseFloat(number).toLocaleString()
+            return number + '.'
+        } else {
+            return parseFloat(number).toLocaleString()
+        }
     }
 }
 
@@ -82,19 +176,24 @@ for (let key in keys) {
         button.classList.add('zero')
     }
     button.addEventListener('click', (e) => {
-        //buttonsEvents(e, keys[key]);
         switch (keys[key].type) {
             case 'reset':
-                calculator.reset()
+                calculator.resetKey()
                 break;
             case 'del':
-                calculator.del()
+                calculator.delKey()
                 break;
             case 'comma':
-                if (this.output.textContent.indexOf(keys[key].text) < 0) {
-                    this.output.textContent += keys[key].text
-                }
-                //(operand) ? rightOperand += object.text : leftOperand += keys[key]
+                calculator.commaKey(keys[key].text)
+                break;
+            case 'number':
+                calculator.numKey(keys[key].text)
+                break;
+            case 'operand':
+                calculator.operandKey(keys[key].text, e)
+                break;
+            case 'equal':
+                calculator.equalKey()
                 break;
             default:
                 break;
