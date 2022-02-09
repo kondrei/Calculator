@@ -58,6 +58,7 @@ html {
 
 .small {
   font-size: 3rem;
+  line-height: 100px;
 }
 
 .buttons {
