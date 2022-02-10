@@ -81,6 +81,7 @@ html {
   height: 70px;
   font-size: 2rem;
   cursor: pointer;
+  
 }
 
 .button:hover{
@@ -108,8 +109,19 @@ html {
 }
 
 .selected {
-  background-color: #fff;
+  /* background-color: #fff;
   color: #000;
+  transition: background-color 1s ease-out;
+  background-color: var(--orangeButton); */
+  animation-name: animate;
+  animation-duration: 2s; 
+}
+
+@keyframes animate {
+  0%   {background-color: var(--orangeButton);color: #fff;}
+  25%  {background-color: #fff;color: #000}
+  50%  {background-color: #fff;color: #000}
+  100% {background-color: var(--orangeButton);color: #fff;}
 }
 
 .message {
@@ -130,15 +142,17 @@ html {
 }
 
 .popUp {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
   background-color: var(--grayButton);
   position: inherit;
   top:0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 150px;
-  height: 350px;
+  width: 200px;
+  height: 450px;
   margin:auto;
   border-radius: 10px;
   box-shadow: 5px 5px 15px 5px #ff8080, -5px 5px 15px 5px #ffe488;

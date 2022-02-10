@@ -4,7 +4,7 @@ class Calculator {
     * Class Calculator
     * @param {HTML Element} output = element where calculation will be shown
     *    
-    *  @returns (string) element.textContent
+    * @returns (string) element.textContent
     */
     constructor(output) {
         this.output = output
@@ -32,7 +32,6 @@ class Calculator {
         this.rightOperand = 0
         this.operand = null
         this.firstIOperation = null
-        console.log('reset method')
         document.querySelectorAll('.selected').forEach((element) => {
             element.classList.remove('selected')
         })
@@ -43,19 +42,19 @@ class Calculator {
         digitRemains.pop();
         (digitRemains.join('')) ? output.textContent = digitRemains.join('') : output.textContent = '0';
         (this.operand) ? this.rightOperand = this.output.textContent : this.leftOperand = this.output.textContent
-        console.log('delete method')
         this.output.textContent = this.#formatDigits(this.output.textContent)
     }
 
     commaKey(value) {
         if (this.output.textContent.indexOf(value) < 0) {
-            this.output.textContent += value
+            this.output.textContent += value;
+
+            (this.operand) ? this.rightOperand += value : this.leftOperand += value
         }
-        (this.operand) ? this.rightOperand += value : this.leftOperand += value
     }
 
     numKey(value) {
-        if (this.#checkLength(this.output.textContent)) {
+        if (this.#checkLength(this.output.textContent) || this.firstIOperation) {
             (this.operand) ? this.rightOperand += value : this.leftOperand += value
 
             if (this.firstIOperation) {
@@ -65,12 +64,11 @@ class Calculator {
                 (this.output.textContent === '0') ? this.output.textContent = value : this.output.textContent += value
         }
         this.output.textContent = this.#formatDigits(this.output.textContent)
-        console.log(this.leftOperand, this.operand, this.rightOperand)
     }
 
-    operandKey(value, e) {
+    operandKey(value = '/') {
         if (this.leftOperand != 0) {
-            e.target.classList.add('selected')
+            document.getElementsByClassName(value)[0].classList.add('selected')
             this.operand = value
             this.firstIOperation = true
             if (this.leftOperand != 0 && this.rightOperand != 0 && this.operand) {
@@ -82,31 +80,44 @@ class Calculator {
     equalKey() {
         if (this.leftOperand != 0 && this.rightOperand != 0 && this.operand) {
             this.output.textContent = this.#calculate(this.leftOperand, this.rightOperand, this.operand)
+            document.getElementsByClassName('=')[0].classList.add('selected')
         }
     }
+
+    percentKey() {
+        this.output.textContent = this.output.textContent / 100;
+        (this.operand) ? this.rightOperand = this.output.textContent : this.leftOperand = this.output.textContent
+    }
+
     #calculate(left, right, operation) {
         let result = 0
+        left = Number(left)
+        right = Number(right)
         switch (operation) {
             case "+":
-                result = parseFloat(left) + parseFloat(right)
+                result = left + right
                 break;
             case "-":
-                result = parseFloat(left) - parseFloat(right)
+                result = left - right
                 break;
-            case "x":
-                result = parseFloat(left) * parseFloat(right)
+            case "*":
+                result = left * right
                 break;
-            case "&#247;":
-                result = parseFloat(left) / parseFloat(right)
+            case "/":
+                result = left / right
                 break;
         }
         this.resetKey()
         this.leftOperand = result
-        return result
+        if (!this.#checkLength(result.toString())) {
+            output.classList.add('small')
+            return Number(result).toExponential(2)
+        }
+        return this.#formatDigits(result.toString())
     }
 
     #checkLength(number) {
-        number = this.#formatNumber(number)
+        number = number.replaceAll(',', '')
         if (number.length > 10) {
             return false
         }
@@ -114,29 +125,18 @@ class Calculator {
         return true;
     }
 
-    #formatNumber(number) {
-        return number.replaceAll(',', '')
-    }
 
     #formatDigits(number) {
-        number = this.#formatNumber(number)
-        if (parseFloat(number) > 999999) {
+        number = number.replaceAll(',', '')
+        if (Number(number) > 999999) {
             output.classList.add('small')
         } else {
             output.classList.remove('small')
         }
 
-        return this.#checkComma(number)
+        return parseFloat(number).toLocaleString()
     }
 
-    #checkComma(number) {
-        if (number[number.length - 1] === '.') {
-            number = parseFloat(number).toLocaleString()
-            return number + '.'
-        } else {
-            return parseFloat(number).toLocaleString()
-        }
-    }
 }
 
 
@@ -144,11 +144,11 @@ this.keys = [
     { type: 'reset', text: 'AC', color: 'gray' },
     { type: 'del', text: '&#8592;', color: 'gray' },
     { type: 'percent', text: '%', color: 'gray' },
-    { type: 'operand', text: '&#247;', color: 'orange' },
+    { type: 'operand', text: '/', color: 'orange' },
     { type: 'number', text: '7', color: 'black' },
     { type: 'number', text: '8', color: 'black' },
     { type: 'number', text: '9', color: 'black' },
-    { type: 'operand', text: 'x', color: 'orange' },
+    { type: 'operand', text: '*', color: 'orange' },
     { type: 'number', text: '4', color: 'black' },
     { type: 'number', text: '5', color: 'black' },
     { type: 'number', text: '6', color: 'black' },
@@ -163,19 +163,22 @@ this.keys = [
 ]
 
 let buttons = document.querySelector('.buttons')
+let output = document.querySelector('.outputDisplay')
 
-output = document.querySelector('.outputDisplay')
 let calculator = new Calculator(output)
 
 for (let key in keys) {
     let button = document.createElement('div')
     button.classList.add('button')
+    if (keys[key].type === 'operand' || keys[key].type === 'equal') {
+        button.classList.add(keys[key].text)
+    }
     button.classList.add(keys[key].color)
     button.innerHTML = keys[key].text
     if (keys[key].text === '0') {
         button.classList.add('zero')
     }
-    button.addEventListener('click', (e) => {
+    button.addEventListener('click', (element) => {
         switch (keys[key].type) {
             case 'reset':
                 calculator.resetKey()
@@ -190,10 +193,13 @@ for (let key in keys) {
                 calculator.numKey(keys[key].text)
                 break;
             case 'operand':
-                calculator.operandKey(keys[key].text, e)
+                calculator.operandKey(keys[key].text, element)
                 break;
             case 'equal':
                 calculator.equalKey()
+                break;
+            case 'percent':
+                calculator.percentKey()
                 break;
             default:
                 break;
@@ -202,7 +208,41 @@ for (let key in keys) {
     buttons.appendChild(button)
 }
 
+document.querySelector('.background').addEventListener('click', () => {
+    document.querySelector('.background').classList.remove('show')
+})
 
+document.addEventListener('keyup', (e) => {
+    const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Escape', 'Delete', 'Backspace', '.', '?', '+', '-', '/', '*', 'Enter', '=']
+    if (numbers.indexOf(e.key) >= 0) {
+        console.log(e.key)
+        switch (e.key) {
+            case 'Escape':
+                calculator.resetKey()
+                break;
+            case 'Delete': case 'Backspace':
+                calculator.delKey()
+                break;
+            case '.':
+                calculator.commaKey(e.key)
+                break;
+            case 'number':
+                break;
+            case '?':
+                document.querySelector('.background').classList.toggle('show')
+                break;
+            case '+': case '-': case '/': case '*':
+                calculator.operandKey(e.key)
+                break;
+            case 'Enter': case '=':
+                calculator.equalKey()
+                break;
+            default:
+                calculator.numKey(e.key)
+                break;
+        }
+    }
+})
 
 // let clock = document.querySelector('.clock')
 // function showClock() {
@@ -319,7 +359,6 @@ for (let key in keys) {
 //         output.textContent = calculate(leftOperand, rightOperand, operand)
 //     }
 //     output.textContent = formatDigits(output.textContent)
-//     console.log(leftOperand, operand, rightOperand)
 // }
 
 // function calculate(left, right, operation) {
