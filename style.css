@@ -166,7 +166,7 @@ html {
 
 @media screen and (max-height: 790px) {
   .phone {
-    height: 85vh;
+    height: 75vh;
   }
   .topBar {
     margin-bottom: 0px;
