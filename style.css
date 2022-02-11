@@ -157,6 +157,7 @@ html {
   border-radius: 10px;
   box-shadow: 5px 5px 15px 5px #ff8080, -5px 5px 15px 5px #ffe488;
   padding: 2rem;
+  font-size: .9rem;
 }
 
 .show {
