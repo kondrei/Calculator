@@ -16,7 +16,6 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   flex-direction: column;
 }
 
@@ -165,7 +164,7 @@ html {
   position: absolute;
 }
 
-@media screen and (max-height: 760px) {
+@media screen and (max-height: 790px) {
   .phone {
     height: 85vh;
   }
@@ -175,5 +174,26 @@ html {
 
   .outputDisplay {
     padding: 0px;
+    font-size: 3rem;
+    line-height: 100px;
+    height: auto;
   }
+}
+
+.footer {
+  background-color: var(--grayButton);
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+}
+
+a, a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+a:hover{
+  color: var(--blackButton);
 }

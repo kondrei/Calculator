@@ -225,10 +225,10 @@ document.addEventListener('keyup', (e) => {
         navigator.clipboard.writeText(output.textContent)
             .then(() => {
                 document.querySelector('.message').textContent = ('copied to clipboard')
+                setTimeout(() => {
+                    document.querySelector('.message').textContent = '? for keyboard shortcuts'
+                }, 2000)
             })
-        setTimeout(() => {
-            document.querySelector('.message').textContent = '? for keyboard shortcuts'
-        }, 2000)
     }
 
     if (e.ctrlKey && e.key === 'v') {
@@ -237,10 +237,10 @@ document.addEventListener('keyup', (e) => {
                 output.textContent = calculator.formatDigits(clipText)
                 calculator.leftOperand = clipText
                 document.querySelector('.message').textContent = ('pasted from clipboard')
+                setTimeout(() => {
+                    document.querySelector('.message').textContent = '? for keyboard shortcuts'
+                }, 2000)
             })
-        setTimeout(() => {
-            document.querySelector('.message').textContent = '? for keyboard shortcuts'
-        }, 2000)
     }
 
     if (numbers.indexOf(e.key) >= 0) {
