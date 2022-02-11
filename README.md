@@ -1,5 +1,5 @@
 # Calculator
-## The Odin Project - Calculator
+# The Odin Project - Calculator
 
 Make some calculus [here](https://calculator-gold-five.vercel.app/), if it is finished :smiley:
 
