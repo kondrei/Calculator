@@ -183,7 +183,7 @@ html {
 .footer {
   background-color: var(--grayButton);
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   width: 100%;
   text-align: center;
   padding-top: 5px;
