@@ -163,3 +163,16 @@ html {
   display: block;
   position: absolute;
 }
+
+@media screen and (max-height: 760px) {
+  .phone {
+    height: 85vh;
+  }
+  .topBar {
+    margin-bottom: 0px;
+  }
+
+  .outputDisplay {
+    padding: 0px;
+  }
+}
