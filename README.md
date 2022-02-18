@@ -1,7 +1,7 @@
 # Calculator
 # The Odin Project - Calculator
 
-Make some calculus [here](https://calculator-gold-five.vercel.app/), if it is finished :smiley:
+Make some calculus [here](https://calculator-gold-five.vercel.app/) :smiley:
 
 Mission: to do [this](https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator) project.
 
